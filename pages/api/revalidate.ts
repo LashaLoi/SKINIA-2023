@@ -1,15 +1,10 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const query = `
-  query MainPage {
-    mainPages {
-      id
-      title
-    }
+export default async function handler(_: NextApiRequest, res: NextApiResponse) {
+  try {
+    await res.revalidate("/index");
+    return res.json({ revalidated: true });
+  } catch (err) {
+    return res.status(500).send("Error revalidating");
   }
-`;
-
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.status(200).json({ name: "John Doe" });
 }
